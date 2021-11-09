@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "hscp"
+version = "0.1.0"
+description = "Client library for HyScores."
+authors = ["moonburnt <moonburnt@disroot.org>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.26.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^21.10-beta.0"
+pytest = "^6.2.5"
+python-dotenv = "^0.19.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
