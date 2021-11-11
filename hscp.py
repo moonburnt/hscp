@@ -1,29 +1,35 @@
-import requests
 import logging
+
+from typing import Optional
+from urllib.parse import urljoin as join
+
+import requests
 
 log = logging.getLogger(__name__)
 
 
 class AuthError(Exception):
-    """Exception to raise when authentification has failed"""
+    """Exception to raise when authentification has failed."""
 
     pass
 
 
 class InvalidName(Exception):
-    """Exception to raise when nickname can't be found"""
+    """Exception to raise when nickname can't be found."""
 
     pass
 
 
 class TokenUnavailable(Exception):
-    """Exception to raise when token isn't set"""
+    """Exception to raise when token isn't set."""
 
     pass
 
 
 class HyScoresClient:
-    def __init__(self, url, app: str, timeout: int = 30, user_agent: str = None):
+    def __init__(
+        self, url, app: str, timeout: int = 30, user_agent: Optional[str] = None
+    ):
         self.url = url
         self.session = requests.Session()
         self.timeout = max(timeout, 0)
@@ -50,12 +56,10 @@ class HyScoresClient:
         self._token = val
         self.session.headers.update({"x-access-tokens": self._token})
 
-    def register(
-        self, username: str, password: str, endpoint: str = "/register"
-    ) -> bool:
+    def register(self, username: str, password: str) -> bool:
         return (
             self.session.post(
-                self.url + endpoint,
+                join(self.url, "register"),
                 timeout=self.timeout,
                 auth=(username, password),
                 json={"app": self.app},
@@ -64,10 +68,10 @@ class HyScoresClient:
             .get("result", False)
         )
 
-    def login(self, username: str, password: str, endpoint: str = "/login"):
+    def login(self, username: str, password: str):
         result = (
             self.session.post(
-                self.url + endpoint,
+                join(self.url, "login"),
                 timeout=self.timeout,
                 auth=(username, password),
                 json={"app": self.app},
@@ -93,17 +97,17 @@ class HyScoresClient:
         return inner
 
     @require_token
-    def get_scores(self, endpoint: str = "/scores") -> list:
+    def get_scores(self) -> list:
         return self.session.get(
-            self.url + endpoint,
+            join(self.url, "scores"),
             timeout=self.timeout,
             json={"app": self.app},
         ).json()["result"]
 
     @require_token
-    def get_score(self, nickname: str, endpoint: str = "/score") -> dict:
+    def get_score(self, nickname: str) -> dict:
         result = self.session.get(
-            self.url + endpoint,
+            join(self.url, "score"),
             timeout=self.timeout,
             json={
                 "app": self.app,
@@ -115,11 +119,10 @@ class HyScoresClient:
         else:
             raise InvalidName
 
-    # #TODO: maybe add ability to attach custom data, besides score?
     @require_token
-    def post_score(self, nickname: str, score: int, endpoint: str = "/score") -> bool:
+    def post_score(self, nickname: str, score: int) -> bool:
         return self.session.post(
-            self.url + endpoint,
+            join(self.url, "score"),
             timeout=self.timeout,
             json={
                 "app": self.app,

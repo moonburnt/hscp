@@ -1,4 +1,5 @@
 import pytest
+
 import hscp
 
 url = "http://example.com"
