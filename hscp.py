@@ -35,17 +35,10 @@ class HyScoresClient:
         self.timeout = max(timeout, 0)
         self.app = app
 
-        self.user_agent = user_agent
+        if user_agent:
+            self.session.headers["user-agent"] = user_agent
+
         self._token = None
-
-    @property
-    def user_agent(self):
-        return self._user_agent
-
-    @user_agent.setter
-    def user_agent(self, val: str):
-        self._user_agent = val
-        self.session.headers.update({"user-agent": self._user_agent})
 
     @property
     def token(self):
