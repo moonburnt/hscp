@@ -5,6 +5,7 @@ description = "Client library for HyScores."
 authors = ["moonburnt <moonburnt@disroot.org>"]
 license = "MIT"
 readme = "README.md"
+homepage = "https://github.com/moonburnt/hscp"
 
 [tool.poetry.dependencies]
 python = "^3.9"
