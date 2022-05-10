@@ -22,6 +22,7 @@ def authorized_client(client):
     client.token = token
     return client
 
+
 def test_client():
     client = hscp.HyScoresClient(
         url=url,
@@ -31,12 +32,9 @@ def test_client():
     assert client.app == app
 
     user_agent = "pytest_client"
-    client = hscp.HyScoresClient(
-        url=url,
-        app=app,
-        user_agent=user_agent
-    )
+    client = hscp.HyScoresClient(url=url, app=app, user_agent=user_agent)
     assert client.session.headers["user-agent"] == user_agent
+
 
 def test_token_fail(client):
     with pytest.raises(hscp.TokenUnavailable):
@@ -73,6 +71,7 @@ def test_score_fail(requests_mock, authorized_client):
 def test_score_uploader(requests_mock, authorized_client):
     requests_mock.post(url + "/score", json={"result": True})
     assert authorized_client.post_score("sadam", 69) is True
+
 
 def test_logout(authorized_client):
     authorized_client.logout()
