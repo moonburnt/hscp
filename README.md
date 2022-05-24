@@ -1,8 +1,10 @@
 # HSCP
 
+[![Tests](https://github.com/moonburnt/hscp/actions/workflows/tests.yml/badge.svg)](https://github.com/moonburnt/hscp/actions/workflows/tests.yml)
+
 ## Description:
 
-**HSCP** is a [HyScores](https://github.com/0x5b/hyscores) Client, written in 
+**HSCP** is a [HyScores](https://github.com/0x5b/hyscores) Client, written in
 Python. Its designed to be a simple and efficient library to use in your games.
 
 ## Usage:
@@ -19,7 +21,7 @@ client = HyScoresClient(
 )
 
 # If you arent registered on this instance yet
-client.register("your_login", "your_password") 
+client.register("your_login", "your_password")
 
 client.login("your_login", "your_password")
 

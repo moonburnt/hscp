@@ -1,0 +1,42 @@
+name: Tests
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10"]
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: Checkout LFS objects
+      run: git lfs checkout
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Setup Environment
+      run: |
+        # Install poetry
+        pip install poetry
+        # Install dependencies
+        poetry install
+        # Configure pytest
+        printf "[pytest]\nlog_cli = true\nasyncio_mode = strict\n" >> ./pytest.ini
+
+    - name: Run Tests
+      run: |
+        poetry run python -m pytest ./tests
